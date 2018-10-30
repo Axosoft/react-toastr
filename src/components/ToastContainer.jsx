@@ -66,7 +66,7 @@ export class ToastContainer extends React.PureComponent<Props> {
    * @public
    */
   error(message, title, optionsOverride) {
-    this.handleNotify(
+    return this.handleNotify(
       this.props.toastType.error,
       message,
       title,
@@ -82,7 +82,7 @@ export class ToastContainer extends React.PureComponent<Props> {
    * @public
    */
   info(message, title, optionsOverride) {
-    this.handleNotify(
+    return this.handleNotify(
       this.props.toastType.info,
       message,
       title,
@@ -98,7 +98,7 @@ export class ToastContainer extends React.PureComponent<Props> {
    * @public
    */
   success(message, title, optionsOverride) {
-    this.handleNotify(
+    return this.handleNotify(
       this.props.toastType.success,
       message,
       title,
@@ -114,7 +114,7 @@ export class ToastContainer extends React.PureComponent<Props> {
    * @public
    */
   warning(message, title, optionsOverride) {
-    this.handleNotify(
+    return this.handleNotify(
       this.props.toastType.warning,
       message,
       title,
@@ -135,13 +135,13 @@ export class ToastContainer extends React.PureComponent<Props> {
   }
 
   handleNotify(type, message, title, optionsOverride = {}) {
+    const key = _.uniqueId("toast_")
     if (
       this.props.preventDuplicates &&
       _.includes(this.state.toastList, { message })
     ) {
-      return
+      return key
     }
-    const key = _.uniqueId("toast_")
     const nextToast = {
       ...optionsOverride,
       key,
@@ -164,6 +164,7 @@ export class ToastContainer extends React.PureComponent<Props> {
         ? [nextToast, ...state.toastList]
         : [...state.toastList, nextToast],
     }))
+    return key
   }
 
   handleOnToastClick = event => {
